@@ -1,17 +1,15 @@
 module.exports = {
   name: "interactionCreate",
+
   async execute(client, interaction) {
 
+    // ================= SLASH COMMANDS =================
     if (interaction.isChatInputCommand()) {
-      const cmd = client.commands.get(interaction.commandName);
-      if (cmd) cmd.execute(interaction, client);
-    }
+      const command = client.commands.get(interaction.commandName);
 
-    if (interaction.isButton()) {
-      if (interaction.customId === "create_ticket") {
-        const channel = await client.systems.tickets.create(interaction);
-        interaction.reply({ content: `Created: ${channel}`, ephemeral: true });
+      if (!command) {
+        return interaction.reply({
+          content: "Command not found",
+          ephemeral: true
+        });
       }
-    }
-  }
-};
